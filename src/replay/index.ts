@@ -183,7 +183,7 @@ export class Replayer {
     this.iframe = document.createElement('iframe');
     this.iframe.setAttribute('sandbox', 'allow-same-origin');
     this.iframe.setAttribute('scrolling', 'no');
-    this.iframe.setAttribute('style', 'pointer-events: none');
+    this.iframe.setAttribute('style', 'pointer-events: none; display: none');
     this.wrapper.appendChild(this.iframe);
   }
 
@@ -289,7 +289,11 @@ export class Replayer {
       );
     }
     this.missingNodeRetryMap = {};
-    mirror.map = rebuild(event.data.node, this.iframe.contentDocument!)[1];
+    mirror.map = rebuild(
+      event.data.node,
+      this.iframe.contentDocument!,
+      false,
+    )[1];
     const styleEl = document.createElement('style');
     const { documentElement, head } = this.iframe.contentDocument!;
     documentElement!.insertBefore(styleEl, head);
@@ -376,6 +380,7 @@ export class Replayer {
             this.iframe.contentDocument!,
             mirror.map,
             true,
+            false,
           ) as Node;
           let previous: Node | null = null;
           let next: Node | null = null;
@@ -573,6 +578,10 @@ export class Replayer {
         if (!target) {
           return this.debugNodeNotFound(d, d.id);
         }
+        this.emitter.emit(ReplayerEvents.Input, {
+          target,
+          data: d,
+        });
         try {
           ((target as Node) as HTMLInputElement).checked = d.isChecked;
           ((target as Node) as HTMLInputElement).value = d.text;
