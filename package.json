@@ -1,5 +1,5 @@
 {
-  "name": "rrweb",
+  "name": "@yunyu/rrweb-patched",
   "version": "0.7.33",
   "description": "record and replay the web",
   "scripts": {
