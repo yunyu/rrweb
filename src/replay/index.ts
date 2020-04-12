@@ -194,21 +194,8 @@ export class Replayer {
     const event = this.config.unpackFn
       ? this.config.unpackFn(rawEvent as string)
       : (rawEvent as eventWithTime);
-    if (this.playing) {
-      const currentTime = this.events[0].timestamp + this.timer.timeOffset;
-      const isSync = event.timestamp < currentTime;
-      const castFn = this.getCastFn(event, isSync);
-      if (isSync) {
-        castFn();
-      } else {
-        const action = {
-          doAction: castFn,
-          delay: 0,
-        };
-        console.log(action)
-        this.timer.addAction(action);
-      }
-    }
+    const castFn = this.getCastFn(event, false);	  
+    castFn();	
     this.events.push(event);
   }
 
