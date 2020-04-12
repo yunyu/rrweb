@@ -390,7 +390,7 @@ function initScrollObserver(
         y: (evt.target as HTMLElement).scrollTop,
       });
     }
-  }, 100);
+  }, 250);
   return on('scroll', updatePosition);
 }
 
