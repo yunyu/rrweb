@@ -137,8 +137,8 @@ export class Replayer {
   public play(timeOffset = 0) {
     this.timer.clear();
     this.baselineTime = this.events[0].timestamp + timeOffset;
-    console.log("baselineTime", this.baselineTime)
-    const actions = new Array<actionWithDelay>(); 
+    console.log('baselineTime', this.baselineTime);
+    const actions = new Array<actionWithDelay>();
     for (const event of this.events) {
       const isSync = event.timestamp <= this.baselineTime;
       const castFn = this.getCastFn(event, isSync);
@@ -154,7 +154,7 @@ export class Replayer {
         });
       }
     }
-    console.log("remaining actions", actions)
+    console.log('remaining actions', actions);
     this.timer.addActions(actions);
     this.timer.start();
     this.playing = true;
@@ -194,8 +194,21 @@ export class Replayer {
     const event = this.config.unpackFn
       ? this.config.unpackFn(rawEvent as string)
       : (rawEvent as eventWithTime);
-    const castFn = this.getCastFn(event, false);	  
-    castFn();	
+    if (this.playing) {
+      const currentTime = this.baselineTime + this.timer.timeOffset;
+      const isSync = event.timestamp < currentTime;
+      const castFn = this.getCastFn(event, isSync);
+      if (isSync) {
+        castFn();
+      } else {
+        const action = {
+          doAction: castFn,
+          delay: 0,
+        };
+        console.log(action);
+        this.timer.addAction(action);
+      }
+    }
     this.events.push(event);
   }
 
