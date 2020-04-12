@@ -492,10 +492,10 @@ export class Replayer {
         break;
       }
       case IncrementalSource.MouseMove:
-        if (isSync) {
+        if (true) {
           const lastPosition = d.positions[d.positions.length - 1];
           this.moveAndHover(d, lastPosition.x, lastPosition.y, lastPosition.id);
-        } else {
+        } /* else {
           d.positions.forEach((p) => {
             const action = {
               doAction: () => {
@@ -505,7 +505,7 @@ export class Replayer {
             };
             this.timer.addAction(action);
           });
-        }
+        } */
         break;
       case IncrementalSource.MouseInteraction: {
         /**
