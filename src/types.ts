@@ -322,6 +322,7 @@ export type playerConfig = {
   insertStyleRules: string[];
   triggerFocus: boolean;
   unpackFn?: UnpackFn;
+  onResize: () => void;
 };
 
 export type playerMetaData = {

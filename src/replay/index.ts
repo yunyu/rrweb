@@ -85,6 +85,7 @@ export class Replayer {
       liveMode: false,
       insertStyleRules: [],
       triggerFocus: true,
+      onResize: () => {},
     };
     this.config = Object.assign({}, defaultConfig, config);
 
@@ -231,6 +232,7 @@ export class Replayer {
   private handleResize(dimension: viewportResizeDimention) {
     this.iframe.width = `${dimension.width}px`;
     this.iframe.height = `${dimension.height}px`;
+    this.config.onResize();
   }
 
   // TODO: add speed to mouse move timestamp calculation
