@@ -138,7 +138,6 @@ export class Replayer {
   public play(timeOffset = 0) {
     this.timer.clear();
     this.baselineTime = this.events[0].timestamp + timeOffset;
-    console.log('baselineTime', this.baselineTime);
     const actions = new Array<actionWithDelay>();
     for (const event of this.events) {
       const isSync = event.timestamp <= this.baselineTime;
@@ -155,7 +154,6 @@ export class Replayer {
         });
       }
     }
-    console.log('remaining actions', actions);
     this.timer.addActions(actions);
     this.timer.start();
     this.playing = true;
@@ -201,12 +199,13 @@ export class Replayer {
       const castFn = this.getCastFn(event, isSync);
       if (isSync) {
         castFn();
+        // console.log("synchronous cast")
       } else {
         const action = {
           doAction: castFn,
-          delay: 0,
+          delay: event.timestamp - currentTime,
         };
-        console.log(action);
+        // console.log("adding action with delay", action.delay)
         this.timer.addAction(action);
       }
     }
